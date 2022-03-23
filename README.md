@@ -12,6 +12,11 @@ I decided to work with a moderate dataset covering all tweets using "#UN" since 
 
 It is important to acknowledge that as analysis are made by humans, they will fundamentally be biased. I have made my greatest effort to be as unbiased as possible in my analysis and writing, while understanding that removing all bias is likely impossible. This may result in a somewhat dispassionate tone regarding major events which bring great suffering to many people, yet it is not the purpose of this project to bring about a political message and for that reason I find this approach the most appropriate.
 
+## Exemplifying result of processed, analysed and clustered data
+A Dendogram of major trends, using cosine similarity to group keywords according to similarity in their temporal occurence.
+
+![dendogram_trends](https://user-images.githubusercontent.com/43865617/159815652-d5561e96-6010-4f26-a24f-e85175dec8dd.png)
+
 ## Summary <a class="anchor" id="summary"></a>
 In summary I have analysed tweets ranging from the 1st of January 2021 to the 24th of February 2022 containing the #UN in English. Through a combination of statistics, deep learning, dimensionality reduction and clustering I have been able to distill the main talking points for twitter users as well as their sentiment in regards to these topics. Overall I have found that there is a substantial response to outbreaks of conflict, in particular those that receive extensive media coverage. I find 4 "large" trends that encompass many different subtopics and which received most of the attention of Twitter users, and 13 trends overall which had varying levels of response but all had clear peaks at specific timepoints.
 
