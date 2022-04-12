@@ -2,7 +2,7 @@ name: scrape_process_analyse
 
 on:
   schedule:
-    - cron: '00 18 * * *' # runs at 12:00 UTC everyday
+    - cron: '45 18 * * *' # runs at 12:00 UTC everyday
 
 jobs:
   build:
