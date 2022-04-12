@@ -60,6 +60,9 @@ def get_list_files(tweet_dir):
 tweet_dir = 'data_tweets/'
 list_files = get_list_files(tweet_dir)
 
+list_files = list_files[-2:]
+print(list_files)
+
 # Get tweet list, classify them using the sentiment trained transformer and save as csv
 # This will take about 4 hours
 for file in tqdm(list_files):
