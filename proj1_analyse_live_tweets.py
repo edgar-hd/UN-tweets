@@ -66,13 +66,15 @@ repeat_timescales = pd.concat([pd.DataFrame(list_all_day,columns=['Daily']),
                                full_set['Sentiment']],axis=1)
 
 
+fig_dir = "figures/"
+
 sns.set(rc = {'figure.figsize':(16,8)})
 ax = sns.histplot(data=repeat_timescales, x='Daily', hue='Sentiment', stat="density", element="step")
 ax.set_xlim([0,24]);
 ax.set(xlabel='Time of the day', title='Distribution of tweets during the day');
 plt.axvline(15, color='k', linestyle='dashed', linewidth=1);
 plt.axvline(20, color='k', linestyle='dashed', linewidth=1);
-plt.savefig('fig1a_Day_distribution.pdf')
+plt.savefig(fig_dir+'fig1a_Day_distribution.pdf')
 
 sns.set(rc = {'figure.figsize':(16,8)})
 wPlot = sns.histplot(data=repeat_timescales, x='Weekly', hue='Sentiment', stat="density", element="step",)
@@ -80,7 +82,7 @@ wPlot.set_xticks(np.arange(0.5,7.5,1))
 wPlot.set_xticklabels(['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']);
 wPlot.set_xlim([0,7]);
 wPlot.set(title='Distribution of tweets during the week');
-plt.savefig('fig1b_Week_distribution.pdf')
+plt.savefig(fig_dir+'fig1b_Week_distribution.pdf')
 
 # I use a sliding window to smooth out the data and analyse time intervals easier
 def get_sliding_window_pos(start_date_string, window_size, step_size):
@@ -124,7 +126,7 @@ ax.stackplot(np.array(window_tweet_num_smth['Datetime']), np.array(window_tweet_
 ax.set_xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
 ax.set(ylabel='Number of tweets in 72h', title='Tweet volume over time', label=["Fibonacci ", "Evens", "Odds"]);
 ax.legend(loc='upper left');
-plt.savefig('fig1c_All_tweets_dynamics.pdf')
+plt.savefig(fig_dir+'fig1c_All_tweets_dynamics.pdf')
 
 
 ###################### New Section
@@ -196,7 +198,7 @@ plt.plot(window_index[:,1],top10_dyn_tot_PCA[:,:len(var_comp_tot)]);
 plt.gca().legend(top_topics_tot_PCA);
 plt.xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
 plt.ylabel("Component value"); plt.title("Principal Components over time");
-plt.savefig('fig2a_top_tot_PCA.pdf')
+plt.savefig(fig_dir+'fig2a_top_tot_PCA.pdf')
 
 top_words_tot_dyn = np.array([top10_dyn_tot[:,top10_tot.index(top_topics_tot[i])]
                               for i in range(len(top_topics_tot))]).T
@@ -204,7 +206,7 @@ plt.plot(window_index[:,0],top_words_tot_dyn)
 plt.gca().legend(top_topics_tot)
 plt.xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
 plt.ylabel("# of tweets"); plt.title("Tweets over time");
-plt.savefig('fig2b_top_tot_from_PCA.pdf')
+plt.savefig(fig_dir+'fig2b_top_tot_from_PCA.pdf')
 
 
 pca_pos = decomposition.PCA(n_components=0.95)
@@ -222,7 +224,7 @@ plt.plot(window_index[:,1],top10_dyn_pos_PCA[:,:len(var_comp_pos)]);
 plt.gca().legend(top_topics_pos_PCA);
 plt.xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
 plt.ylabel("Component value"); plt.title('"Positive" Principal Components over time');
-plt.savefig('fig2c_top_pos_PCA.pdf')
+plt.savefig(fig_dir+'fig2c_top_pos_PCA.pdf')
 
 top_words_pos_dyn = np.array([top10_dyn_pos[:,top10_pos.index(top_topics_pos[i])]
                               for i in range(len(top_topics_pos))]).T
@@ -230,7 +232,7 @@ plt.plot(window_index[:,0],top_words_pos_dyn)
 plt.gca().legend(top_topics_pos)
 plt.xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
 plt.ylabel("# of tweets"); plt.title("Positive tweets over time");
-plt.savefig('fig2d_top_pos_from_PCA.pdf')
+plt.savefig(fig_dir+'fig2d_top_pos_from_PCA.pdf')
 
 
 ###################### New Section
@@ -242,7 +244,7 @@ peak_row_index = np.array([i for i,row in enumerate(test) if np.sum(row > 0)])
 
 plt.plot(peak_rows.T);
 plt.title("Number of salient topics: "+str(len(peak_rows)));
-plt.savefig('fig3a_onoff_topics.pdf')
+plt.savefig(fig_dir+'fig3a_onoff_topics.pdf')
 
 from scipy.cluster.hierarchy import dendrogram, linkage
 from sklearn.cluster import AgglomerativeClustering
@@ -287,15 +289,15 @@ clustering = clustering.fit(peak_rows)
 plt.figure(figsize=(16, 30))
 lm = plot_dendrogram(clustering, color_threshold = cos_dis_thrs, labels = peak_row_names, orientation = 'right',
                     leaf_font_size=14)
-plt.savefig('fig3b_dendogram_trends.pdf')
-plt.savefig('fig3b_dendogram_trends.svg')
+plt.savefig(fig_dir+'fig3b_dendogram_trends.pdf')
+plt.savefig(fig_dir+'fig3b_dendogram_trends.svg')
 
 
 ###################### New Section
 
 ax = sns.jointplot(x=np.sum(peak_rows,axis=1), y=np.sum(top10_dyn_tot[:,peak_row_index],axis=0)/24)
 ax.set_axis_labels(xlabel="Hours actively tweeted", ylabel="Smoothed total tweet number");
-plt.savefig('fig4a_time-vs-volume.pdf')
+plt.savefig(fig_dir+'fig4a_time-vs-volume.pdf')
 
 def get_bursts(burst_list, masked_list, normal_list):
     start_burst,end_burst = [],[]
@@ -387,7 +389,7 @@ ax = sns.histplot(y);
 ax.set_xticks(np.arange(1,9,1))
 ax.set_xticklabels(np.exp2(np.arange(1,9,1)).astype(np.int16));
 ax.set(title='Length of training peaks, total peaks: '+str(len(full_bursts)));
-plt.savefig('fig4b_peak_distribution.pdf')
+plt.savefig(fig_dir+'fig4b_peak_distribution.pdf')
 
 
 from sklearn.model_selection import cross_val_score
@@ -403,7 +405,7 @@ ax.set_xticks(np.arange(1,9,1))
 ax.set_xticklabels(np.exp2(np.arange(1,9,1)).astype(np.int16));
 ax.set_yticks(np.arange(1,9,1))
 ax.set_yticklabels(np.exp2(np.arange(1,9,1)).astype(np.int16));
-plt.savefig('fig4c_test_correlation.pdf')
+plt.savefig(fig_dir+'fig4c_test_correlation.pdf')
 
 
 ongoing_full_bursts = []
@@ -430,4 +432,4 @@ melted_ongoing_top_words = ongoing_top_words.melt(id_vars='Word', var_name="Keys
 sns.set(rc = {'figure.figsize':(16,8)})
 sns.barplot(data = melted_ongoing_top_words, x= "Word", y= "Days", hue= "Keys");
 plt.xticks(rotation=45);
-plt.savefig('fig4d_current_topics_lifetime.pdf')
+plt.savefig(fig_dir+'fig4d_current_topics_lifetime.pdf')
