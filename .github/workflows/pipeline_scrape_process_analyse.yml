@@ -1,8 +1,8 @@
-name: scraper-san-juan-gobierno
+name: scrape_process_analyse
 
 on:
   schedule:
-    - cron: '20 18 * * *' # runs at 12:00 UTC everyday
+    - cron: '25 16 * * *' # runs at 12:00 UTC everyday
 
 jobs:
   build:
