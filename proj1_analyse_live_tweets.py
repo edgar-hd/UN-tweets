@@ -194,12 +194,16 @@ for component in pca_tot.components_]
 top_topics_tot = [topics[0] for topics in pca_topics_tot][:len(var_comp_tot)]
 top_topics_tot_PCA = ['PCA '+str(i+1)+': '+topics[0] for i, topics in enumerate(pca_topics_tot)][:len(var_comp_tot)]
 
+plt.figure(0)
+sns.set(rc = {'figure.figsize':(16,8)})
 plt.plot(window_index[:,1],top10_dyn_tot_PCA[:,:len(var_comp_tot)]);
 plt.gca().legend(top_topics_tot_PCA);
 plt.xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
 plt.ylabel("Component value"); plt.title("Principal Components over time");
 plt.savefig(fig_dir+'fig2a_top_tot_PCA.pdf')
 
+plt.figure(0)
+sns.set(rc = {'figure.figsize':(16,8)})
 top_words_tot_dyn = np.array([top10_dyn_tot[:,top10_tot.index(top_topics_tot[i])]
                               for i in range(len(top_topics_tot))]).T
 plt.plot(window_index[:,0],top_words_tot_dyn)
@@ -220,12 +224,16 @@ for component in pca_pos.components_]
 top_topics_pos = [topics[0] for topics in pca_topics_pos][:len(var_comp_pos)]
 top_topics_pos_PCA = ['PCA '+str(i+1)+': '+topics[0] for i, topics in enumerate(pca_topics_pos)][:len(var_comp_pos)]
 
+plt.figure(0)
+sns.set(rc = {'figure.figsize':(16,8)})
 plt.plot(window_index[:,1],top10_dyn_pos_PCA[:,:len(var_comp_pos)]);
 plt.gca().legend(top_topics_pos_PCA);
 plt.xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
 plt.ylabel("Component value"); plt.title('"Positive" Principal Components over time');
 plt.savefig(fig_dir+'fig2c_top_pos_PCA.pdf')
 
+plt.figure(0)
+sns.set(rc = {'figure.figsize':(16,8)})
 top_words_pos_dyn = np.array([top10_dyn_pos[:,top10_pos.index(top_topics_pos[i])]
                               for i in range(len(top_topics_pos))]).T
 plt.plot(window_index[:,0],top_words_pos_dyn)
@@ -242,6 +250,8 @@ peak_rows = np.array([row for row in test if np.sum(row > 0)])
 peak_row_names = np.array([top10_tot[i] for i,row in enumerate(test) if np.sum(row > 0)])
 peak_row_index = np.array([i for i,row in enumerate(test) if np.sum(row > 0)])
 
+plt.figure(0)
+sns.set(rc = {'figure.figsize':(16,8)})
 plt.plot(peak_rows.T);
 plt.title("Number of salient topics: "+str(len(peak_rows)));
 plt.savefig(fig_dir+'fig3a_onoff_topics.pdf')
@@ -286,15 +296,19 @@ cos_dis_thrs = 0.7
 clustering = AgglomerativeClustering(distance_threshold=cos_dis_thrs, n_clusters=None,
                                 linkage='average', affinity='cosine', compute_distances=True)
 clustering = clustering.fit(peak_rows)
+
+plt.figure(0)
 plt.figure(figsize=(16, 30))
 lm = plot_dendrogram(clustering, color_threshold = cos_dis_thrs, labels = peak_row_names, orientation = 'right',
                     leaf_font_size=14)
 plt.savefig(fig_dir+'fig3b_dendogram_trends.pdf')
 plt.savefig(fig_dir+'fig3b_dendogram_trends.svg')
+plt.savefig(fig_dir+'fig3b_dendogram_trends.png')
 
 
 ###################### New Section
 
+plt.figure(0)
 ax = sns.jointplot(x=np.sum(peak_rows,axis=1), y=np.sum(top10_dyn_tot[:,peak_row_index],axis=0)/24)
 ax.set_axis_labels(xlabel="Hours actively tweeted", ylabel="Smoothed total tweet number");
 plt.savefig(fig_dir+'fig4a_time-vs-volume.pdf')
@@ -384,11 +398,15 @@ y = y/24
 y = np.log2(y)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+plt.clf()
+plt.figure(0)
 sns.set(rc = {'figure.figsize':(16,8)})
-ax = sns.histplot(y);
-ax.set_xticks(np.arange(1,9,1))
-ax.set_xticklabels(np.exp2(np.arange(1,9,1)).astype(np.int16));
-ax.set(title='Length of training peaks, total peaks: '+str(len(full_bursts)));
+bx = sns.histplot(y);
+bx.set_xlim([0.5,8.5])
+bx.set_xticks(np.arange(1,9,1))
+bx.set_xticklabels(np.exp2(np.arange(1,9,1)).astype(np.int16));
+bx.set(title='Length of training peaks, total peaks: '+str(len(full_bursts)));
 plt.savefig(fig_dir+'fig4b_peak_distribution.pdf')
 
 
@@ -398,13 +416,17 @@ from sklearn.ensemble import ExtraTreesRegressor
 reg = ExtraTreesRegressor(n_estimators=1000, random_state=42).fit(X_train, y_train)
 print(reg.score(X_test, y_test))
 
+plt.clf()
+plt.figure(0)
 sns.set(rc = {'figure.figsize':(6,6)})
-ax = sns.scatterplot(x=y_test,y=reg.predict(X_test));
-ax.set(ylabel="Predicted Number of Days",xlabel="Real Number of Days",title="Regression Score: "+str(np.round(reg.score(X_test, y_test),2)));
-ax.set_xticks(np.arange(1,9,1))
-ax.set_xticklabels(np.exp2(np.arange(1,9,1)).astype(np.int16));
-ax.set_yticks(np.arange(1,9,1))
-ax.set_yticklabels(np.exp2(np.arange(1,9,1)).astype(np.int16));
+cx = sns.scatterplot(x=y_test,y=reg.predict(X_test));
+# ax.set_xlim([0.5,8.5])
+# ax.set_ylim([0.5,8.5])
+cx.set(ylabel="Predicted Number of Days",xlabel="Real Number of Days",title="Regression Score: "+str(np.round(reg.score(X_test, y_test),2)));
+cx.set_xticks(np.arange(1,9,1))
+cx.set_xticklabels(np.exp2(np.arange(1,9,1)).astype(np.int16));
+cx.set_yticks(np.arange(1,9,1))
+cx.set_yticklabels(np.exp2(np.arange(1,9,1)).astype(np.int16));
 plt.savefig(fig_dir+'fig4c_test_correlation.pdf')
 
 
@@ -428,8 +450,10 @@ ongoing_top_words = pd.DataFrame([peak_row_names[ongoing_burst_index],
 ongoing_top_words.columns = ["Word","Current Duration","Predicted Lifetime"]
 melted_ongoing_top_words = ongoing_top_words.melt(id_vars='Word', var_name="Keys", value_name="Days")
 
-
+plt.clf()
+plt.figure(0)
 sns.set(rc = {'figure.figsize':(16,8)})
-sns.barplot(data = melted_ongoing_top_words, x= "Word", y= "Days", hue= "Keys");
+dx = sns.barplot(data = melted_ongoing_top_words, x= "Word", y= "Days", hue= "Keys");
 plt.xticks(rotation=45);
 plt.savefig(fig_dir+'fig4d_current_topics_lifetime.pdf')
+plt.savefig(fig_dir+'fig4d_current_topics_lifetime.png')
