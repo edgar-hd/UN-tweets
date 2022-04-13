@@ -1,3 +1,5 @@
+[![scrape_process_analyse](https://github.com/edgar-hd/UN-tweets/actions/workflows/pipeline_scrape_process_analyse.yml/badge.svg)](https://github.com/edgar-hd/UN-tweets/actions/workflows/pipeline_scrape_process_analyse.yml)
+
 # Analysis of tweets involving the hashtag "#UN"
 
 Please refer to the jupyter notebook [proj1_analyse_tweets.ipynb](proj1_analyse_tweets.ipynb) for a breakdown of the project, I write below the motivation and summary which can also be found in the notebook.
