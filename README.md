@@ -28,6 +28,6 @@ Note the above numbers have likely changed as time passes but I will not change 
 
 I have further trained a random forest model to predict how long ongoing trends will remain actively tweeted about. This model and prediction are updated as data is collected daily. The below plot containing ongoing trends and their predictions of duration is therefore also updated daily.
 
-![dendogram_trends](figures/fig4d_current_topics_lifetime.pdf)
+![dendogram_trends](figures/fig4d_current_topics_lifetime.png)
 
 Further avenues of research are to test these approaches on longer timescales to try to identify cyclic patterns, some being obvious such as relating to the opening of the general assembly each year; this may also identify the frequency of "trending" events related to the UN. Another interesting approach would be to try with different hashtags as controls, ideally one completely unrelated dataset and one closely related dataset to serve as negative and positive controls respectively. Overall I find this analysis useful to understand user response to political events and the results suggests this is a valid pipeline for extracting information regarding other topics on social media.
