@@ -449,6 +449,7 @@ ongoing_top_words = pd.DataFrame([peak_row_names[ongoing_burst_index],
     np.exp2(reg.predict(ongoing_full_bursts))]).transpose()
 ongoing_top_words.columns = ["Word","Current Duration","Predicted Lifetime"]
 melted_ongoing_top_words = ongoing_top_words.melt(id_vars='Word', var_name="Keys", value_name="Days")
+melted_ongoing_top_words["Days"] = melted_ongoing_top_words["Days"].astype(np.float32)
 
 plt.clf()
 plt.figure(0)
