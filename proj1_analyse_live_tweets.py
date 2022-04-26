@@ -444,8 +444,9 @@ for (burst, acum_burst) in zip(ongoing_burst_list, ongoing_burst_acum_list):
 ongoing_full_bursts = np.array(ongoing_full_bursts)
 
 
-ongoing_top_words = pd.DataFrame([peak_row_names[ongoing_burst_index],
-    np.array([len(burst)/24 for burst in ongoing_burst_list]),
+minLen_index =[ongoing_burst_index[i] for i in range(len(ongoing_burst_list)) if len(ongoing_burst_list[i]) > 24]
+ongoing_top_words = pd.DataFrame([peak_row_names[minLen_index],
+    np.array([len(burst)/24 for burst in ongoing_burst_list if len(burst) > 24]),
     np.exp2(reg.predict(ongoing_full_bursts))]).transpose()
 ongoing_top_words.columns = ["Word","Current Duration","Predicted Lifetime"]
 melted_ongoing_top_words = ongoing_top_words.melt(id_vars='Word', var_name="Keys", value_name="Days")
