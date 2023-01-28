@@ -161,7 +161,7 @@ def get_top10_progression(condition, top10_words, alpha):
     dict_index = get_flat_window(window_index_result[0], condition)
     top10_dyn = [np.array([dict_index.get(key,0) for key in top10_words])]
     
-    for index in tqdm_notebook(window_index_result[1:]):
+    for index in tqdm(window_index_result[1:]):
         dict_index = get_flat_window(index, condition)
         temp_vals = np.array([dict_index.get(key,0) for key in top10_words])
         top10_dyn.append(alpha*temp_vals + (1-alpha)*top10_dyn[-1])
@@ -171,7 +171,7 @@ def get_top10_progression(condition, top10_words, alpha):
 
 def get_top10_window(condition, min_times, alpha):
     top10_list = set()
-    for window_pos in tqdm_notebook(window_index_result):
+    for window_pos in tqdm(window_index_result):
         dict_index = get_flat_window(window_pos, condition)
         top_words = dict_index.most_common(10)
         top_words = [tup[0] for tup in top_words if tup[1] >= min_times]
