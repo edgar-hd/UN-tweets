@@ -98,7 +98,7 @@ def get_sliding_window_pos(start_date_string, window_size, step_size):
 def get_window_number_exp_smth(window_index, alpha):
     window_index_result = []
     all_tweet_num = []
-    for window_pos in tqdm(window_index):
+    for window_pos in window_index:
         window_index_result.append((window_pos[0] <= full_set['Datetime']) & (full_set['Datetime']  < window_pos[1]))
         window_tweets = full_set[(window_pos[0] <= full_set['Datetime']) & (full_set['Datetime']  < window_pos[1])]
         prev_weight = (all_tweet_num[-1] if len(all_tweet_num)>0 else [0,0,0,0,0])
@@ -118,6 +118,7 @@ start_date_string = '2021-01-01 00:00:00'
 window_index = get_sliding_window_pos(start_date_string, window_size = 72, step_size = 1)
 # window_tweet_num, window_index_result = get_window_number_sentiment(window_index)
 window_tweet_num_smth, window_index_result = get_window_number_exp_smth(window_index,0.1)
+print("Indexed sliding window tweets")
 
 sns.set(rc = {'figure.figsize':(16,8)})
 fig, ax = plt.subplots()
@@ -149,6 +150,7 @@ def clean_sentence(sentence):
     return cleaned
 
 words_List = [clean_sentence(text) for text in tqdm(full_set['Text'])]
+print("Performed word cleaning")
 
 def get_flat_window(window_index, condition):
     all_words = [words_List[i] for i in np.where(window_index & condition)[0]]
@@ -161,23 +163,25 @@ def get_top10_progression(condition, top10_words, alpha):
     dict_index = get_flat_window(window_index_result[0], condition)
     top10_dyn = [np.array([dict_index.get(key,0) for key in top10_words])]
     
-    for index in tqdm(window_index_result[1:]):
+    for index in window_index_result[1:]:
         dict_index = get_flat_window(index, condition)
         temp_vals = np.array([dict_index.get(key,0) for key in top10_words])
         top10_dyn.append(alpha*temp_vals + (1-alpha)*top10_dyn[-1])
         
+    print("For '"+str(condition)+"', obtained dynamics of top10 words")
     return(np.array(top10_dyn))
 
 
 def get_top10_window(condition, min_times, alpha):
     top10_list = set()
-    for window_pos in tqdm(window_index_result):
+    for window_pos in window_index_result:
         dict_index = get_flat_window(window_pos, condition)
         top_words = dict_index.most_common(10)
         top_words = [tup[0] for tup in top_words if tup[1] >= min_times]
         top10_list.update(top_words)
 
     top10_list = list(dict.fromkeys(top10_list))
+    print("For '"+str(condition)+", obtained top10 words")
     top10_dyn = get_top10_progression(condition, top10_list, alpha)
     
     return(top10_list, top10_dyn)
@@ -188,7 +192,11 @@ top10_neg, top10_dyn_neg = get_top10_window(full_set['Sentiment'] == 'Negative',
 top10_neu, top10_dyn_neu = get_top10_window(full_set['Sentiment'] == 'Neutral', min_times, 0.1)
 top10_tot, top10_dyn_tot = get_top10_window(1, min_times, 0.1)
 
+print("All top10 word trajectories captured")
+
 from sklearn import decomposition
+
+print("Performing PCA analysis")
 
 pca_tot = decomposition.PCA(n_components=0.95)
 pca_tot.fit(top10_dyn_tot)

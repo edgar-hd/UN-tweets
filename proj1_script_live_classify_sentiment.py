@@ -74,7 +74,7 @@ print("Files to process: ", target_files)
 # This will take about 4 hours
 for file in tqdm(target_files):
     raw_data = pd.read_csv(tweet_dir+file,lineterminator='\n')
-    list_tweets = raw_data[raw_data['Language'] == 'en'].reset_index(drop=True)
-    sentiment_list = pd.DataFrame([get_sentiment_tweet(tweet) for tweet in tqdm(list_tweets['Text'])])
+    list_tweets = raw_data[raw_data['Language'] == 'en'].reset_idnex(drop=True)
+    sentiment_list = pd.DataFrame([get_sentiment_tweet(tweet) for tweet in list_tweets['Text']])
     list_tweets[['Negative','Neutral','Positive']] = sentiment_list
     list_tweets.to_csv(tweet_dir + re.sub('un_mentions','un_mentions_processed',file),index=False)

@@ -47,5 +47,6 @@ def collect_save_tweets(dateList, dateList_string,query,sectSize):
 
 if not os.path.exists('data_tweets'): os.makedirs('data_tweets')
 # This takes about 2 hours for approx 400 days, roughly 200 days/hour
-dateList, dateList_string = get_date_range('20220317', 10)
+dateList, dateList_string = get_date_range('20210101', 10)
+print(dateList)
 collect_save_tweets(dateList, dateList_string, "#UN", 10)
