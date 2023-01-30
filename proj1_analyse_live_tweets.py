@@ -149,7 +149,7 @@ def clean_sentence(sentence):
     cleaned = [i for i in word_tokenize(sentence.lower()) if i not in stop]
     return cleaned
 
-words_List = [clean_sentence(text) for text in tqdm(full_set['Text'])]
+words_List = [clean_sentence(text) for text in full_set['Text']]
 print("Performed word cleaning")
 
 def get_flat_window(window_index, condition):
