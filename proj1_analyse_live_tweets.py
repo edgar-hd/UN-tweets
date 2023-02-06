@@ -108,7 +108,11 @@ def get_window_number_exp_smth(window_index, alpha):
         pos_tweets = alpha*len(window_tweets[window_tweets['Sentiment'] == 'Positive']) + (1 - alpha)*prev_weight[4]
         all_tweet_num.append([window_pos[1],tot_tweets,neg_tweets,neu_tweets,pos_tweets])
     all_tweet_num = pd.DataFrame(all_tweet_num)
-    all_tweet_num.set_axis(['Datetime', 'All', 'Negative', 'Neutral', 'Positive'], axis=1, inplace=True)
+    all_tweet_num = all_tweet_num.set_axis(
+        ['Datetime', 'All', 'Negative', 'Neutral', 'Positive'],
+        axis=1,
+        copy=False
+    )
     return (all_tweet_num, window_index_result)
 
 
@@ -132,18 +136,19 @@ plt.savefig(fig_dir+'fig1c_All_tweets_dynamics.pdf')
 
 ###################### New Section
 
-from nltk import word_tokenize
-from nltk.corpus import stopwords
-import nltk
-from collections import Counter
 import sys
+import nltk
+import string
+from nltk import word_tokenize
+from collections import Counter
+from nltk.corpus import stopwords
 
 nltk.download('stopwords')
-nltk.download('punkt')
+# nltk.download('punkt')
 
-import string
 stop = set(stopwords.words('english') + list(string.punctuation))
 stop.update(['’','https','un','amp','``',"''","'s",'..','...',"n't",'--','”','–','//','“','like','also','put','ask','w/','unitednations'])
+print("Defined stopwords")
 
 def clean_sentence(sentence):
     cleaned = [i for i in word_tokenize(sentence.lower()) if i not in stop]
