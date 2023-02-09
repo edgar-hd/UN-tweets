@@ -132,7 +132,7 @@ ax.set_xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
 ax.set(ylabel='Number of tweets in 72h', title='Tweet volume over time', label=["Fibonacci ", "Evens", "Odds"]);
 ax.legend(loc='upper left');
 plt.savefig(fig_dir+'fig1c_All_tweets_dynamics.pdf')
-
+print("Classified tweets by sentiment")
 
 ###################### New Section
 
