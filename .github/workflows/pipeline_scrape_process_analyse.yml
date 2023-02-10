@@ -8,12 +8,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-
       - name: checkout repo content
         uses: actions/checkout@v3 # checkout the repository content to github runner
 
       - name: setup python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: '3.10.6' # install the python version needed
           
@@ -23,10 +22,6 @@ jobs:
           pip install -r requirements.txt
           
       - name: execute py script # run proj1_script_live_collect_data.py to get the latest data
-        # env: 
-          # EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
-          # EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-          # EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
         run: python proj1_script_live_collect_data.py
           
       - name: execute py script # run proj1_script_live_classify_sentiment.py to classify sentiment
