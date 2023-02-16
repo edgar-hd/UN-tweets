@@ -143,9 +143,9 @@ from nltk import word_tokenize
 from collections import Counter
 from nltk.corpus import stopwords
 
-# print("Downloading stopwords")
-# nltk.download('stopwords')
-# nltk.download('punkt')
+print("Downloading stopwords")
+nltk.download('stopwords')
+nltk.download('punkt')
 
 # print("Set up stopwords")
 # stop = set(stopwords.words('english') + list(string.punctuation))
