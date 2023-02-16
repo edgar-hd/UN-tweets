@@ -136,12 +136,12 @@ print("Classified tweets by sentiment")
 
 ###################### New Section
 
-# import sys
-# import nltk
-# import string
-# from nltk import word_tokenize
-# from collections import Counter
-# from nltk.corpus import stopwords
+import sys
+import nltk
+import string
+from nltk import word_tokenize
+from collections import Counter
+from nltk.corpus import stopwords
 
 # print("Downloading stopwords")
 # nltk.download('stopwords')
