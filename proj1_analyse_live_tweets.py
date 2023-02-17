@@ -147,10 +147,10 @@ print("Downloading stopwords")
 nltk.download('stopwords')
 nltk.download('punkt')
 
-# print("Set up stopwords")
-# stop = set(stopwords.words('english') + list(string.punctuation))
-# stop.update(['’','https','un','amp','``',"''","'s",'..','...',"n't",'--','”','–','//','“','like','also','put','ask','w/','unitednations'])
-# print("Defined stopwords")
+print("Set up stopwords")
+stop = set(stopwords.words('english') + list(string.punctuation))
+stop.update(['’','https','un','amp','``',"''","'s",'..','...',"n't",'--','”','–','//','“','like','also','put','ask','w/','unitednations'])
+print("Defined stopwords")
 
 # def clean_sentence(sentence):
 #     cleaned = [i for i in word_tokenize(sentence.lower()) if i not in stop]
