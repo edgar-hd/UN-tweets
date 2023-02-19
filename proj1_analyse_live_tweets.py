@@ -159,45 +159,45 @@ def clean_sentence(sentence):
 words_List = [clean_sentence(text) for text in full_set['Text']]
 print("Performed word cleaning")
 
-# def get_flat_window(window_index, condition):
-#     all_words = [words_List[i] for i in np.where(window_index & condition)[0]]
-#     flat_list_words = [item for sublist in all_words for item in sublist]
-#     dict_index = Counter(flat_list_words)
-#     return dict_index
+def get_flat_window(window_index, condition):
+    all_words = [words_List[i] for i in np.where(window_index & condition)[0]]
+    flat_list_words = [item for sublist in all_words for item in sublist]
+    dict_index = Counter(flat_list_words)
+    return dict_index
     
 
-# def get_top10_progression(condition, top10_words, alpha):
-#     dict_index = get_flat_window(window_index_result[0], condition)
-#     top10_dyn = [np.array([dict_index.get(key,0) for key in top10_words])]
+def get_top10_progression(condition, top10_words, alpha):
+    dict_index = get_flat_window(window_index_result[0], condition)
+    top10_dyn = [np.array([dict_index.get(key,0) for key in top10_words])]
     
-#     for index in window_index_result[1:]:
-#         dict_index = get_flat_window(index, condition)
-#         temp_vals = np.array([dict_index.get(key,0) for key in top10_words])
-#         top10_dyn.append(alpha*temp_vals + (1-alpha)*top10_dyn[-1])
+    for index in window_index_result[1:]:
+        dict_index = get_flat_window(index, condition)
+        temp_vals = np.array([dict_index.get(key,0) for key in top10_words])
+        top10_dyn.append(alpha*temp_vals + (1-alpha)*top10_dyn[-1])
         
-#     print("For '"+str(condition)+"', obtained dynamics of top10 words")
-#     return(np.array(top10_dyn))
+    print("For '"+str(condition)+"', obtained dynamics of top10 words")
+    return(np.array(top10_dyn))
 
 
-# def get_top10_window(condition, min_times, alpha):
-#     top10_list = set()
-#     for window_pos in window_index_result:
-#         dict_index = get_flat_window(window_pos, condition)
-#         top_words = dict_index.most_common(10)
-#         top_words = [tup[0] for tup in top_words if tup[1] >= min_times]
-#         top10_list.update(top_words)
+def get_top10_window(condition, min_times, alpha):
+    top10_list = set()
+    for window_pos in window_index_result:
+        dict_index = get_flat_window(window_pos, condition)
+        top_words = dict_index.most_common(10)
+        top_words = [tup[0] for tup in top_words if tup[1] >= min_times]
+        top10_list.update(top_words)
 
-#     top10_list = list(dict.fromkeys(top10_list))
-#     print("For '"+str(condition)+", obtained top10 words")
-#     top10_dyn = get_top10_progression(condition, top10_list, alpha)
+    top10_list = list(dict.fromkeys(top10_list))
+    print("For '"+str(condition)+", obtained top10 words")
+    top10_dyn = get_top10_progression(condition, top10_list, alpha)
     
-#     return(top10_list, top10_dyn)
+    return(top10_list, top10_dyn)
 
-# min_times = 20
-# top10_pos, top10_dyn_pos = get_top10_window(full_set['Sentiment'] == 'Positive', min_times, 0.1)
-# top10_neg, top10_dyn_neg = get_top10_window(full_set['Sentiment'] == 'Negative', min_times, 0.1)
-# top10_neu, top10_dyn_neu = get_top10_window(full_set['Sentiment'] == 'Neutral', min_times, 0.1)
-# top10_tot, top10_dyn_tot = get_top10_window(1, min_times, 0.1)
+min_times = 20
+top10_pos, top10_dyn_pos = get_top10_window(full_set['Sentiment'] == 'Positive', min_times, 0.1)
+top10_neg, top10_dyn_neg = get_top10_window(full_set['Sentiment'] == 'Negative', min_times, 0.1)
+top10_neu, top10_dyn_neu = get_top10_window(full_set['Sentiment'] == 'Neutral', min_times, 0.1)
+top10_tot, top10_dyn_tot = get_top10_window(1, min_times, 0.1)
 
 # print("All top10 word trajectories captured")
 
