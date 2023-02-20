@@ -175,7 +175,7 @@ def get_top10_progression(condition, top10_words, alpha):
         temp_vals = np.array([dict_index.get(key,0) for key in top10_words])
         top10_dyn.append(alpha*temp_vals + (1-alpha)*top10_dyn[-1])
         
-    print("For '"+str(condition)+"', obtained dynamics of top10 words")
+    #print("For '"+str(condition)+"', obtained dynamics of top10 words")
     return(np.array(top10_dyn))
 
 
@@ -188,7 +188,7 @@ def get_top10_window(condition, min_times, alpha):
         top10_list.update(top_words)
 
     top10_list = list(dict.fromkeys(top10_list))
-    print("For '"+str(condition)+", obtained top10 words")
+    # print("For '"+str(condition)+", obtained top10 words")
     top10_dyn = get_top10_progression(condition, top10_list, alpha)
     
     return(top10_list, top10_dyn)
@@ -199,22 +199,24 @@ top10_neg, top10_dyn_neg = get_top10_window(full_set['Sentiment'] == 'Negative',
 top10_neu, top10_dyn_neu = get_top10_window(full_set['Sentiment'] == 'Neutral', min_times, 0.1)
 top10_tot, top10_dyn_tot = get_top10_window(1, min_times, 0.1)
 
-# print("All top10 word trajectories captured")
+print("All top10 word trajectories captured")
 
-# from sklearn import decomposition
+from sklearn import decomposition
 
-# print("Performing PCA analysis")
+print("Performing PCA analysis")
 
-# pca_tot = decomposition.PCA(n_components=0.95)
-# pca_tot.fit(top10_dyn_tot)
-# top10_dyn_tot_PCA = pca_tot.fit_transform(top10_dyn_tot)
-# var_comp_tot = pca_tot.explained_variance_ratio_[pca_tot.explained_variance_ratio_ >= 0.05]
+pca_tot = decomposition.PCA(n_components=0.95)
+pca_tot.fit(top10_dyn_tot)
+top10_dyn_tot_PCA = pca_tot.fit_transform(top10_dyn_tot)
+var_comp_tot = pca_tot.explained_variance_ratio_[pca_tot.explained_variance_ratio_ >= 0.05]
 # print(var_comp_tot)
 
-# pca_topics_tot = [np.array(top10_tot)[np.flip(np.argsort(component))][:np.sum(np.flip(np.sort(component)) > 0.15)-1]
-# for component in pca_tot.components_]
-# top_topics_tot = [topics[0] for topics in pca_topics_tot][:len(var_comp_tot)]
-# top_topics_tot_PCA = ['PCA '+str(i+1)+': '+topics[0] for i, topics in enumerate(pca_topics_tot)][:len(var_comp_tot)]
+pca_topics_tot = [np.array(top10_tot)[np.flip(np.argsort(component))][:np.sum(np.flip(np.sort(component)) > 0.15)-1]
+for component in pca_tot.components_]
+top_topics_tot = [topics[0] for topics in pca_topics_tot][:len(var_comp_tot)]
+top_topics_tot_PCA = ['PCA '+str(i+1)+': '+topics[0] for i, topics in enumerate(pca_topics_tot)][:len(var_comp_tot)]
+
+print("End of PCA analysis")
 
 # plt.figure(0)
 # sns.set(rc = {'figure.figsize':(16,8)})
