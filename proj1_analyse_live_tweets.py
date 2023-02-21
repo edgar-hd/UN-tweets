@@ -241,32 +241,32 @@ pca_pos = decomposition.PCA(n_components=0.95)
 pca_pos.fit(top10_dyn_pos)
 top10_dyn_pos_PCA = pca_pos.fit_transform(top10_dyn_pos)
 var_comp_pos = pca_pos.explained_variance_ratio_[pca_pos.explained_variance_ratio_ >= 0.05]
-print(var_comp_pos)
+print("Successfully decomposed PCA")
 
-pca_topics_pos = [np.array(top10_pos)[np.flip(np.argsort(component))][:np.sum(np.flip(np.sort(component)) > 0.1)-1]
-for component in pca_pos.components_]
-top_topics_pos = [topics[0] for topics in pca_topics_pos][:len(var_comp_pos)]
-top_topics_pos_PCA = ['PCA '+str(i+1)+': '+topics[0] for i, topics in enumerate(pca_topics_pos)][:len(var_comp_pos)]
+# pca_topics_pos = [np.array(top10_pos)[np.flip(np.argsort(component))][:np.sum(np.flip(np.sort(component)) > 0.1)-1]
+# for component in pca_pos.components_]
+# top_topics_pos = [topics[0] for topics in pca_topics_pos][:len(var_comp_pos)]
+# top_topics_pos_PCA = ['PCA '+str(i+1)+': '+topics[0] for i, topics in enumerate(pca_topics_pos)][:len(var_comp_pos)]
 
-plt.figure(0)
-sns.set(rc = {'figure.figsize':(16,8)})
-plt.plot(window_index[:,1],top10_dyn_pos_PCA[:,:len(var_comp_pos)]);
-plt.gca().legend(top_topics_pos_PCA);
-plt.xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
-plt.ylabel("Component value"); plt.title('"Positive" Principal Components over time');
-plt.savefig(fig_dir+'fig2c_top_pos_PCA.pdf')
+# plt.figure(0)
+# sns.set(rc = {'figure.figsize':(16,8)})
+# plt.plot(window_index[:,1],top10_dyn_pos_PCA[:,:len(var_comp_pos)]);
+# plt.gca().legend(top_topics_pos_PCA);
+# plt.xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
+# plt.ylabel("Component value"); plt.title('"Positive" Principal Components over time');
+# plt.savefig(fig_dir+'fig2c_top_pos_PCA.pdf')
 
-plt.figure(0)
-sns.set(rc = {'figure.figsize':(16,8)})
-top_words_pos_dyn = np.array([top10_dyn_pos[:,top10_pos.index(top_topics_pos[i])]
-                              for i in range(len(top_topics_pos))]).T
-plt.plot(window_index[:,0],top_words_pos_dyn)
-plt.gca().legend(top_topics_pos)
-plt.xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
-plt.ylabel("# of tweets"); plt.title("Positive tweets over time");
-plt.savefig(fig_dir+'fig2d_top_pos_from_PCA.pdf')
+# plt.figure(0)
+# sns.set(rc = {'figure.figsize':(16,8)})
+# top_words_pos_dyn = np.array([top10_dyn_pos[:,top10_pos.index(top_topics_pos[i])]
+#                               for i in range(len(top_topics_pos))]).T
+# plt.plot(window_index[:,0],top_words_pos_dyn)
+# plt.gca().legend(top_topics_pos)
+# plt.xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
+# plt.ylabel("# of tweets"); plt.title("Positive tweets over time");
+# plt.savefig(fig_dir+'fig2d_top_pos_from_PCA.pdf')
 
-print("Completed PCA plot saving")
+# print("Completed PCA plot saving")
 
 # ###################### New Section
 
