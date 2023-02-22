@@ -225,23 +225,24 @@ plt.gca().legend(top_topics_tot_PCA);
 plt.xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
 plt.ylabel("Component value"); plt.title("Principal Components over time");
 plt.savefig(fig_dir+'fig2a_top_tot_PCA.pdf')
+print("Intermediate flag")
 
-plt.figure(0)
-sns.set(rc = {'figure.figsize':(16,8)})
-top_words_tot_dyn = np.array([top10_dyn_tot[:,top10_tot.index(top_topics_tot[i])]
-                              for i in range(len(top_topics_tot))]).T
-plt.plot(window_index[:,0],top_words_tot_dyn)
-plt.gca().legend(top_topics_tot)
-plt.xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
-plt.ylabel("# of tweets"); plt.title("Tweets over time");
-plt.savefig(fig_dir+'fig2b_top_tot_from_PCA.pdf')
+# plt.figure(0)
+# sns.set(rc = {'figure.figsize':(16,8)})
+# top_words_tot_dyn = np.array([top10_dyn_tot[:,top10_tot.index(top_topics_tot[i])]
+#                               for i in range(len(top_topics_tot))]).T
+# plt.plot(window_index[:,0],top_words_tot_dyn)
+# plt.gca().legend(top_topics_tot)
+# plt.xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
+# plt.ylabel("# of tweets"); plt.title("Tweets over time");
+# plt.savefig(fig_dir+'fig2b_top_tot_from_PCA.pdf')
 
 
-pca_pos = decomposition.PCA(n_components=0.95)
-pca_pos.fit(top10_dyn_pos)
-top10_dyn_pos_PCA = pca_pos.fit_transform(top10_dyn_pos)
-var_comp_pos = pca_pos.explained_variance_ratio_[pca_pos.explained_variance_ratio_ >= 0.05]
-print("Successfully decomposed PCA")
+# pca_pos = decomposition.PCA(n_components=0.95)
+# pca_pos.fit(top10_dyn_pos)
+# top10_dyn_pos_PCA = pca_pos.fit_transform(top10_dyn_pos)
+# var_comp_pos = pca_pos.explained_variance_ratio_[pca_pos.explained_variance_ratio_ >= 0.05]
+# print("Successfully decomposed PCA")
 
 # pca_topics_pos = [np.array(top10_pos)[np.flip(np.argsort(component))][:np.sum(np.flip(np.sort(component)) > 0.1)-1]
 # for component in pca_pos.components_]
