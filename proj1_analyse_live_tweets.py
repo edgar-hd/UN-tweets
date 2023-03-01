@@ -219,12 +219,12 @@ top_topics_tot_PCA = ['PCA '+str(i+1)+': '+topics[0] for i, topics in enumerate(
 print("End of PCA analysis")
 
 # plt.figure(0)
-sns.set(rc = {'figure.figsize':(16,8)})
-plt.plot(window_index[:,1],top10_dyn_tot_PCA[:,:len(var_comp_tot)]);
-plt.gca().legend(top_topics_tot_PCA);
-plt.xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
-plt.ylabel("Component value"); plt.title("Principal Components over time");
-plt.savefig(fig_dir+'fig2a_top_tot_PCA.pdf')
+# sns.set(rc = {'figure.figsize':(16,8)})
+# plt.plot(window_index[:,1],top10_dyn_tot_PCA[:,:len(var_comp_tot)]);
+# plt.gca().legend(top_topics_tot_PCA);
+# plt.xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
+# plt.ylabel("Component value"); plt.title("Principal Components over time");
+# plt.savefig(fig_dir+'fig2a_top_tot_PCA.pdf')
 
 # plt.figure(0)
 # sns.set(rc = {'figure.figsize':(16,8)})
