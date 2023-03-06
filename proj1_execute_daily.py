@@ -199,136 +199,65 @@ top10_neg, top10_dyn_neg = get_top10_window(full_set['Sentiment'] == 'Negative',
 top10_neu, top10_dyn_neu = get_top10_window(full_set['Sentiment'] == 'Neutral', min_times, 0.1)
 top10_tot, top10_dyn_tot = get_top10_window(1, min_times, 0.1)
 
-print("All top10 word trajectories captured")
-
-from sklearn import decomposition
-
-print("Performing PCA analysis")
-
-pca_tot = decomposition.PCA(n_components=0.95)
-pca_tot.fit(top10_dyn_tot)
-top10_dyn_tot_PCA = pca_tot.fit_transform(top10_dyn_tot)
-var_comp_tot = pca_tot.explained_variance_ratio_[pca_tot.explained_variance_ratio_ >= 0.05]
-# print(var_comp_tot)
-
-pca_topics_tot = [np.array(top10_tot)[np.flip(np.argsort(component))][:np.sum(np.flip(np.sort(component)) > 0.15)-1]
-for component in pca_tot.components_]
-top_topics_tot = [topics[0] for topics in pca_topics_tot][:len(var_comp_tot)]
-top_topics_tot_PCA = ['PCA '+str(i+1)+': '+topics[0] for i, topics in enumerate(pca_topics_tot)][:len(var_comp_tot)]
-
-print("End of PCA analysis")
-
-plt.figure(0)
-sns.set(rc = {'figure.figsize':(16,8)})
-plt.plot(window_index[:,1],top10_dyn_tot_PCA[:,:len(var_comp_tot)]);
-plt.gca().legend(top_topics_tot_PCA);
-plt.xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
-plt.ylabel("Component value"); plt.title("Principal Components over time");
-plt.savefig(fig_dir+'fig2a_top_tot_PCA.pdf')
-
-plt.figure(0)
-sns.set(rc = {'figure.figsize':(16,8)})
-top_words_tot_dyn = np.array([top10_dyn_tot[:,top10_tot.index(top_topics_tot[i])]
-                              for i in range(len(top_topics_tot))]).T
-plt.plot(window_index[:,0],top_words_tot_dyn)
-plt.gca().legend(top_topics_tot)
-plt.xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
-plt.ylabel("# of tweets"); plt.title("Tweets over time");
-plt.savefig(fig_dir+'fig2b_top_tot_from_PCA.pdf')
-
-
-pca_pos = decomposition.PCA(n_components=0.95)
-pca_pos.fit(top10_dyn_pos)
-top10_dyn_pos_PCA = pca_pos.fit_transform(top10_dyn_pos)
-var_comp_pos = pca_pos.explained_variance_ratio_[pca_pos.explained_variance_ratio_ >= 0.05]
-print("Successfully decomposed PCA")
-
-pca_topics_pos = [np.array(top10_pos)[np.flip(np.argsort(component))][:np.sum(np.flip(np.sort(component)) > 0.1)-1]
-for component in pca_pos.components_]
-top_topics_pos = [topics[0] for topics in pca_topics_pos][:len(var_comp_pos)]
-top_topics_pos_PCA = ['PCA '+str(i+1)+': '+topics[0] for i, topics in enumerate(pca_topics_pos)][:len(var_comp_pos)]
-
-plt.figure(0)
-sns.set(rc = {'figure.figsize':(16,8)})
-plt.plot(window_index[:,1],top10_dyn_pos_PCA[:,:len(var_comp_pos)]);
-plt.gca().legend(top_topics_pos_PCA);
-plt.xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
-plt.ylabel("Component value"); plt.title('"Positive" Principal Components over time');
-plt.savefig(fig_dir+'fig2c_top_pos_PCA.pdf')
-
-plt.figure(0)
-sns.set(rc = {'figure.figsize':(16,8)})
-top_words_pos_dyn = np.array([top10_dyn_pos[:,top10_pos.index(top_topics_pos[i])]
-                              for i in range(len(top_topics_pos))]).T
-plt.plot(window_index[:,0],top_words_pos_dyn)
-plt.gca().legend(top_topics_pos)
-plt.xlim([datetime.datetime(2021, 1, 1), datetime.datetime(2022, 4, 30)]);
-plt.ylabel("# of tweets"); plt.title("Positive tweets over time");
-plt.savefig(fig_dir+'fig2d_top_pos_from_PCA.pdf')
-
-print("Completed PCA plot saving")
-
-###################### New Section
-
 test = np.array([np.ceil(np.clip(feature / max(np.median(feature), 1) - 8, 0, 1)) for feature in top10_dyn_tot.T])
 peak_rows = np.array([row for row in test if np.sum(row > 0)])
 peak_row_names = np.array([top10_tot[i] for i,row in enumerate(test) if np.sum(row > 0)])
 peak_row_index = np.array([i for i,row in enumerate(test) if np.sum(row > 0)])
 
-plt.figure(0)
-sns.set(rc = {'figure.figsize':(16,8)})
-plt.plot(peak_rows.T);
-plt.title("Number of salient topics: "+str(len(peak_rows)));
-plt.savefig(fig_dir+'fig3a_onoff_topics.pdf')
+# plt.figure(0)
+# sns.set(rc = {'figure.figsize':(16,8)})
+# plt.plot(peak_rows.T);
+# plt.title("Number of salient topics: "+str(len(peak_rows)));
+# plt.savefig(fig_dir+'fig3a_onoff_topics.pdf')
 
-from scipy.cluster.hierarchy import dendrogram, linkage
-from sklearn.cluster import AgglomerativeClustering
+# from scipy.cluster.hierarchy import dendrogram, linkage
+# from sklearn.cluster import AgglomerativeClustering
 
-def plot_dendrogram(model, **kwargs):
-    # Create linkage matrix and then plot the dendrogram
+# def plot_dendrogram(model, **kwargs):
+#     # Create linkage matrix and then plot the dendrogram
 
-    # create the counts of samples under each node
-    counts = np.zeros(model.children_.shape[0])
-    n_samples = len(model.labels_)
-    for i, merge in enumerate(model.children_):
-        current_count = 0
-        for child_idx in merge:
-            if child_idx < n_samples:
-                current_count += 1  # leaf node
-            else:
-                current_count += counts[child_idx - n_samples]
-        counts[i] = current_count
+#     # create the counts of samples under each node
+#     counts = np.zeros(model.children_.shape[0])
+#     n_samples = len(model.labels_)
+#     for i, merge in enumerate(model.children_):
+#         current_count = 0
+#         for child_idx in merge:
+#             if child_idx < n_samples:
+#                 current_count += 1  # leaf node
+#             else:
+#                 current_count += counts[child_idx - n_samples]
+#         counts[i] = current_count
 
-    linkage_matrix = np.column_stack(
-        [model.children_, model.distances_, counts]
-    ).astype(float)
+#     linkage_matrix = np.column_stack(
+#         [model.children_, model.distances_, counts]
+#     ).astype(float)
 
-    # Plot the corresponding dendrogram
-    dendrogram(linkage_matrix, **kwargs)
-    return linkage_matrix
+#     # Plot the corresponding dendrogram
+#     dendrogram(linkage_matrix, **kwargs)
+#     return linkage_matrix
 
-def llf(id):
-    if id <= 96:
-        return str(peak_row_names[id])
-    else:
-        return '[%d %s]' % (id, 'beep')
+# def llf(id):
+#     if id <= 96:
+#         return str(peak_row_names[id])
+#     else:
+#         return '[%d %s]' % (id, 'beep')
 
-peak_row_names[peak_row_names == '📺livestreaming'] = 'livestreaming'
+# peak_row_names[peak_row_names == '📺livestreaming'] = 'livestreaming'
 
-import matplotlib
-matplotlib.rc_file_defaults()
-cos_dis_thrs = 0.7
-clustering = AgglomerativeClustering(distance_threshold=cos_dis_thrs, n_clusters=None,
-                                linkage='average', affinity='cosine', compute_distances=True)
-clustering = clustering.fit(peak_rows)
+# import matplotlib
+# matplotlib.rc_file_defaults()
+# cos_dis_thrs = 0.7
+# clustering = AgglomerativeClustering(distance_threshold=cos_dis_thrs, n_clusters=None,
+#                                 linkage='average', affinity='cosine', compute_distances=True)
+# clustering = clustering.fit(peak_rows)
 
-plt.figure(0)
-plt.figure(figsize=(16, 30))
-lm = plot_dendrogram(clustering, color_threshold = cos_dis_thrs, labels = peak_row_names, orientation = 'right',
-                    leaf_font_size=14)
-plt.savefig(fig_dir+'fig3b_dendogram_trends.pdf')
-plt.savefig(fig_dir+'fig3b_dendogram_trends.svg')
-plt.savefig(fig_dir+'fig3b_dendogram_trends.png')
+# plt.figure(0)
+# plt.figure(figsize=(16, 30))
+# lm = plot_dendrogram(clustering, color_threshold = cos_dis_thrs, labels = peak_row_names, orientation = 'right',
+#                     leaf_font_size=14)
+# plt.savefig(fig_dir+'fig3b_dendogram_trends.pdf')
+# plt.savefig(fig_dir+'fig3b_dendogram_trends.svg')
+# plt.savefig(fig_dir+'fig3b_dendogram_trends.png')
 
 
 ###################### New Section
