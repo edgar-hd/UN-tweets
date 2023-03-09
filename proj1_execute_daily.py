@@ -204,64 +204,6 @@ peak_rows = np.array([row for row in test if np.sum(row > 0)])
 peak_row_names = np.array([top10_tot[i] for i,row in enumerate(test) if np.sum(row > 0)])
 peak_row_index = np.array([i for i,row in enumerate(test) if np.sum(row > 0)])
 
-# plt.figure(0)
-# sns.set(rc = {'figure.figsize':(16,8)})
-# plt.plot(peak_rows.T);
-# plt.title("Number of salient topics: "+str(len(peak_rows)));
-# plt.savefig(fig_dir+'fig3a_onoff_topics.pdf')
-
-# from scipy.cluster.hierarchy import dendrogram, linkage
-# from sklearn.cluster import AgglomerativeClustering
-
-# def plot_dendrogram(model, **kwargs):
-#     # Create linkage matrix and then plot the dendrogram
-
-#     # create the counts of samples under each node
-#     counts = np.zeros(model.children_.shape[0])
-#     n_samples = len(model.labels_)
-#     for i, merge in enumerate(model.children_):
-#         current_count = 0
-#         for child_idx in merge:
-#             if child_idx < n_samples:
-#                 current_count += 1  # leaf node
-#             else:
-#                 current_count += counts[child_idx - n_samples]
-#         counts[i] = current_count
-
-#     linkage_matrix = np.column_stack(
-#         [model.children_, model.distances_, counts]
-#     ).astype(float)
-
-#     # Plot the corresponding dendrogram
-#     dendrogram(linkage_matrix, **kwargs)
-#     return linkage_matrix
-
-# def llf(id):
-#     if id <= 96:
-#         return str(peak_row_names[id])
-#     else:
-#         return '[%d %s]' % (id, 'beep')
-
-# peak_row_names[peak_row_names == '📺livestreaming'] = 'livestreaming'
-
-# import matplotlib
-# matplotlib.rc_file_defaults()
-# cos_dis_thrs = 0.7
-# clustering = AgglomerativeClustering(distance_threshold=cos_dis_thrs, n_clusters=None,
-#                                 linkage='average', affinity='cosine', compute_distances=True)
-# clustering = clustering.fit(peak_rows)
-
-# plt.figure(0)
-# plt.figure(figsize=(16, 30))
-# lm = plot_dendrogram(clustering, color_threshold = cos_dis_thrs, labels = peak_row_names, orientation = 'right',
-#                     leaf_font_size=14)
-# plt.savefig(fig_dir+'fig3b_dendogram_trends.pdf')
-# plt.savefig(fig_dir+'fig3b_dendogram_trends.svg')
-# plt.savefig(fig_dir+'fig3b_dendogram_trends.png')
-
-
-###################### New Section
-
 plt.figure(0)
 ax = sns.jointplot(x=np.sum(peak_rows,axis=1), y=np.sum(top10_dyn_tot[:,peak_row_index],axis=0)/24)
 ax.set_axis_labels(xlabel="Hours actively tweeted", ylabel="Smoothed total tweet number");
